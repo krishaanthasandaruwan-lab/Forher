@@ -22,6 +22,7 @@
             box-sizing: border-box;
             transition: background-color 0.5s;
         }
+
         .container {
             max-width: 450px;
             width: 100%;
@@ -77,7 +78,8 @@
 </head>
 <body>
 
-    <audio id="bg-music" src="music.WAV" loop></audio>
+    <!-- Make sure this matches your uploaded music file exactly -->
+    <audio id="bg-music" src="music.wav" loop></audio>
 
     <!-- 1. Start Screen -->
     <div id="start-screen" class="container">
@@ -88,8 +90,8 @@
 
     <!-- 2. Video Screen -->
     <div id="video-screen" class="container hidden">
-        <!-- Added webkit-playsinline and preload to prevent mobile bugs -->
-        <video id="intro-video" src="intro.MP4" playsinline webkit-playsinline preload="auto"></video>
+        <!-- Added 'controls' and failsafes here so she can manually play it if her phone blocks it -->
+        <video id="intro-video" src="intro.mp4" playsinline webkit-playsinline controls preload="auto" type="video/mp4"></video>
         <br>
         <button id="btn-next-video" class="hidden" onclick="showMusic()">Let's solve the puzzle 🧩</button>
     </div>
@@ -165,16 +167,16 @@
             screens[screenId].classList.remove('hidden');
         }
 
-        // Bug Fix: Bulletproof video playing for mobile browsers
+        // Bug Fix: Bulletproof video playing
         function playVideo() {
             showScreen('video-screen');
             let playPromise = introVideo.play();
             
             if (playPromise !== undefined) {
                 playPromise.catch(error => {
-                    console.log("Browser prevented auto-play with sound. Forcing mute to play.", error);
-                    introVideo.muted = true;
-                    introVideo.play();
+                    console.log("Browser prevented auto-play. Showing controls and fallback button.", error);
+                    // If the browser blocks it, immediately show the next button so she doesn't get stuck!
+                    document.getElementById('btn-next-video').classList.remove('hidden');
                 });
             }
         }
@@ -187,7 +189,6 @@
             showScreen('music-screen');
         }
 
-        // Bug Fix: Bulletproof audio playing
         function startGame() {
             let playPromise = bgMusic.play();
             if (playPromise !== undefined) {
