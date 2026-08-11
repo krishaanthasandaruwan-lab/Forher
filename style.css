@@ -1,0 +1,73 @@
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@600;800;900&display=swap');
+
+body {
+    font-family: 'Nunito', sans-serif;
+    background-color: #fff0f3;
+    color: #594a4e;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    /* 100dvh forces it to fit perfectly on mobile screens even with the URL bar */
+    min-height: 100dvh; 
+    margin: 0;
+    text-align: center;
+    padding: 15px;
+    box-sizing: border-box;
+    transition: background-color 0.5s;
+}
+
+.container {
+    max-width: 450px;
+    width: 100%;
+    background: #ffffff;
+    padding: 30px 20px;
+    border-radius: 20px;
+    box-shadow: 0 8px 25px rgba(255, 179, 193, 0.4);
+    animation: fadeIn 0.4s ease-in-out;
+}
+
+.hidden { display: none !important; }
+
+h1 { font-size: 1.6rem; color: #ff4d6d; margin-bottom: 15px; font-weight: 900; }
+#reaction-title { color: #ff4d6d; }
+p { font-size: 1.1rem; line-height: 1.5; margin-bottom: 25px; font-weight: 600; }
+
+button {
+    background-color: #ff758f;
+    color: white;
+    border: none;
+    padding: 16px;
+    border-radius: 15px;
+    font-size: 1.1rem;
+    font-weight: 800;
+    width: 100%;
+    margin: 8px 0;
+    cursor: pointer;
+    box-shadow: 0 4px 0 #ff4d6d;
+    transition: transform 0.1s;
+    /* Prevents mobile phones from zooming in when tapping buttons */
+    touch-action: manipulation; 
+}
+
+button:active {
+    transform: translateY(4px);
+    box-shadow: 0 0 0 #ff4d6d;
+}
+
+.funny-mode { background-color: #fff9c4 !important; }
+.btn-funny { background-color: #ffb703; box-shadow: 0 4px 0 #fb8500; color: #000; }
+.btn-funny:active { box-shadow: 0 0 0 #fb8500; }
+.btn-correct { background-color: #4CAF50; box-shadow: 0 4px 0 #2E7D32; }
+
+video, img { width: 100%; border-radius: 15px; margin-bottom: 20px; }
+video { background: #000; }
+
+.serious-text { color: #6d597a; font-size: 1.05rem; font-style: italic; margin-bottom: 20px; }
+.reaction-box { background: #ffeef2; padding: 25px; border-radius: 15px; border: 3px dashed #ff4d6d; }
+#reaction-text, #hug-text { font-weight: 800; font-size: 1.2rem; }
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: scale(0.95); }
+    to { opacity: 1; transform: scale(1); }
+}
