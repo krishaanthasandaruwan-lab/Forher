@@ -89,7 +89,8 @@
 
     <!-- 2. Video Screen -->
     <div id="video-screen" class="container hidden">
-        <video id="intro-video" src="intro.MP4" playsinline></video>
+        <!-- Added webkit-playsinline and preload to prevent mobile bugs -->
+        <video id="intro-video" src="intro.MP4" playsinline webkit-playsinline preload="auto"></video>
         <br>
         <button id="btn-next-video" class="hidden" onclick="showMusic()">Let's solve the puzzle 🧩</button>
     </div>
@@ -165,9 +166,18 @@
             screens[screenId].classList.remove('hidden');
         }
 
+        // Bug Fix: Bulletproof video playing for mobile browsers
         function playVideo() {
             showScreen('video-screen');
-            introVideo.play();
+            let playPromise = introVideo.play();
+            
+            if (playPromise !== undefined) {
+                playPromise.catch(error => {
+                    console.log("Browser prevented auto-play with sound. Forcing mute to play.", error);
+                    introVideo.muted = true;
+                    introVideo.play();
+                });
+            }
         }
 
         introVideo.onended = () => {
@@ -178,14 +188,17 @@
             showScreen('music-screen');
         }
 
+        // Bug Fix: Bulletproof audio playing
         function startGame() {
-            bgMusic.play();
+            let playPromise = bgMusic.play();
+            if (playPromise !== undefined) {
+                playPromise.catch(error => console.log("Audio blocked by browser.", error));
+            }
             loadQuestion();
         }
 
         // --- THE STORY DATA ---
         const story = [
-            // --- SERIOUS & SWEET PART (Q1 to Q3) ---
             {
                 title: "Chapter 1: The Mirror 🌸",
                 desc: "Sometimes, your brain plays tricks on you. It whispers that you aren't good enough, or that nobody cares about you. But those are just lies made up by overthinking. The truth is, you are incredibly special, and there are people who care about you deeply (including me!).",
@@ -219,7 +232,6 @@
                     { text: "ME. The Wonder Woman of Polonnaruwa.", mainPath: true, reaction: "BINGO! The legend awakens. It is time for chaos! 😎🔥" }
                 ]
             },
-            // --- FUNNY & CHAOTIC PART (Q4 to Q6) ---
             {
                 title: "Chapter 4: The Distraction 📱",
                 desc: "",
@@ -322,7 +334,7 @@
                     if(isFunny) btn.classList.add('btn-funny');
                     
                     btn.onclick = () => {
-                        loadQuestion(); 
+                        loadQuestion(); // Reloads the same question until she gets it right
                     };
                     subBtnContainer.appendChild(btn);
                 });
